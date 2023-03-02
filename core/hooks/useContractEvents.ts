@@ -1,7 +1,7 @@
 import { Abi } from '@polkadot/api-contract';
 import { Bytes } from '@polkadot/types';
 import { useContext, useEffect } from 'react';
-import { HALF_A_SECOND } from '../constants.ts';
+import { FIVE_SECONDS, HALF_A_SECOND } from '../constants.ts';
 import {
   ContractEvent,
   ContractEventsContext,
@@ -21,7 +21,7 @@ export const useContractEvents = (
   );
   const { api } = useApi();
   const { blockNumber, header } = useBlockHeader();
-  const config = useConfig();
+  const C = useConfig();
 
   const eventsForAddress = events[address] || [];
 
@@ -71,12 +71,12 @@ export const useContractEvents = (
   useInterval(() => {
     const expiredEvents = getExpiredItem<ContractEvent>(
       eventsForAddress,
-      config.notifications?.expiration,
+      C.notifications?.expiration || FIVE_SECONDS,
     );
     for (const contractEvent of expiredEvents) {
       removeContractEvent({ eventId: contractEvent.id, address });
     }
-  }, config.notifications?.checkInterval || HALF_A_SECOND);
+  }, C.notifications?.checkInterval || HALF_A_SECOND);
 
   return eventsForAddress;
 };
