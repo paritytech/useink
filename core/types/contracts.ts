@@ -1,5 +1,5 @@
 import { AbiMessage, ContractOptions } from '@polkadot/api-contract/types';
-import { ContractExecResult } from '@polkadot/types/interfaces';
+import { ContractExecResult, ContractExecResultResult } from '@polkadot/types/interfaces';
 import { ContractSubmittableResult } from './mod.ts';
 import { Result } from './result.ts';
 import { Status, StorageDeposit, Weight } from './substrate.ts';
@@ -24,8 +24,8 @@ export interface ContractExecResultDecoded<T> {
   readonly gasConsumed: Weight;
   readonly gasRequired: Weight;
   readonly storageDeposit: StorageDeposit;
-  readonly debugMessage: string;
-  readonly result: T;
+  readonly decodedResult: T;
+  readonly rawResult: ContractExecResultResult;
 }
 
 export type ContractTxFunc = {

@@ -5,7 +5,7 @@ import {
   ContractExecResultDecoded,
   Result,
 } from '../../types/mod.ts';
-import { callContractRaw } from './callContractRaw.ts';
+import { callRaw } from './callRaw.ts';
 import { decodeContractExecResult } from './decodeContractExecResult.ts';
 
 export async function callContract<T>(
@@ -14,9 +14,9 @@ export async function callContract<T>(
   caller: AccountId,
   args = [] as unknown[],
 ): Promise<Result<ContractExecResultDecoded<T>, string>> {
-  const callResult = await callContractRaw(contract, abiMessage, caller, args);
+  const raw = await callRaw(contract, abiMessage, caller, args);
 
-  if (!callResult) {
+  if (!raw) {
     return {
       ok: false,
       error: 'No response',
@@ -24,13 +24,13 @@ export async function callContract<T>(
   }
 
   const decoded = decodeContractExecResult<T>(
-    callResult.result,
+    raw.result,
     abiMessage,
     contract.abi.registry,
   );
   if (!decoded.ok) return decoded;
 
-  const { gasConsumed, gasRequired, storageDeposit, debugMessage } = callResult;
+  const { gasConsumed, gasRequired, storageDeposit } = raw;
 
   return {
     ok: true,
@@ -38,8 +38,8 @@ export async function callContract<T>(
       gasConsumed,
       gasRequired,
       storageDeposit,
-      debugMessage: debugMessage.toHuman(),
-      result: decoded.value,
+      decodedResult: decoded.value,
+      rawResult: raw.result
     },
   };
 }

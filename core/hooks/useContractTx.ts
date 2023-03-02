@@ -7,7 +7,7 @@ import {
   ContractTxFunc,
   Status,
 } from '../types/mod.ts';
-import { callContractRaw, toRegistryErrorDecoded } from '../utils/mod.ts';
+import { callRaw, toRegistryErrorDecoded } from '../utils/mod.ts';
 import { useAbiMessage } from './useAbiMessage.ts';
 import { useExtension } from './useExtension.ts';
 import { useNotifications } from './useNotifications.ts';
@@ -54,7 +54,7 @@ export function useContractTx(
           },
         });
 
-      callContractRaw(
+      callRaw(
         contract,
         abiMessage,
         account.address,

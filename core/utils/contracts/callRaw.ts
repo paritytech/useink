@@ -7,7 +7,7 @@ import {
   ContractOptions,
 } from '../../types/mod.ts';
 
-export async function callContractRaw<T>(
+export async function callRaw<T>(
   contract: ContractPromise,
   abiMessage: AbiMessage,
   caller: AccountId | undefined,
